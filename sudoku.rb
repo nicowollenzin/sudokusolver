@@ -27,7 +27,7 @@ class Sudoku
           col_sing = get_singles(get_col(oidx,iidx))
           row_sing.each do |s|
             get_row(oidx,iidx).each do |cell|
-              if cell.remaining > 1
+              if cell.remaining > 1 and cell.possibilities.include? s
                 puts "removing " + s.to_s + " from " + cell.possibilities.to_s + " in " + oidx.to_s+":"+iidx.to_s
                 cell.rem_used s
                 changed = true
@@ -36,7 +36,7 @@ class Sudoku
           end
           col_sing.each do |s|
             get_col(oidx,iidx).each do |cell|
-              if cell.remaining > 1
+              if cell.remaining > 1 and cell.possibilities.include? s
                 cell.rem_used s
                 changed = true
               end
