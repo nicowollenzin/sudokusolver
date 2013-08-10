@@ -16,6 +16,46 @@ class Sudoku
     @blocks.values.each do |block|
       block.update_singles
     end
+    changed = true
+    while changed
+      changed = false
+      (1..3).each do |oidx|
+        (1..3).each do |iidx|
+          #puts oidx.to_s + " " + iidx.to_s
+          row_sing = get_singles(get_row(oidx,iidx))
+          puts row_sing.to_s + " for " + oidx.to_s+":"+iidx.to_s
+          col_sing = get_singles(get_col(oidx,iidx))
+          row_sing.each do |s|
+            get_row(oidx,iidx).each do |cell|
+              if cell.remaining > 1
+                puts "removing " + s.to_s + " from " + cell.possibilities.to_s + " in " + oidx.to_s+":"+iidx.to_s
+                cell.rem_used s
+                changed = true
+              end
+            end
+          end
+          col_sing.each do |s|
+            get_col(oidx,iidx).each do |cell|
+              if cell.remaining > 1
+                cell.rem_used s
+                changed = true
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+  
+  def get_singles(coll)
+    singles = []
+    coll.each do |a|
+      if a.remaining == 1
+        #puts a.class.to_s + " " + a.to_s
+        singles.push a.possibilities[0]
+      end
+    end
+    return singles
   end
 
   def get_row(ridx,cidx)
@@ -31,7 +71,8 @@ class Sudoku
   def get_col(idx,cidx)
     col = []
     (0..2).each do |mult|
-      col += @blocks.values[mult * 3 + idx].get_col cidx
+      #puts " " + mult.to_s
+      col += @blocks.values[mult * 3 + idx - 1].get_col cidx
     end
     return col
   end
