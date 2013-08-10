@@ -9,7 +9,7 @@ class Sudoku
   end
 
   def insert(bidx,cidx,val)
-    blocks[bidx].cells[cidx].set_single(val)
+    blocks[bidx].cells[cidx].set_single(val.to_i)
   end
 
   def solve
